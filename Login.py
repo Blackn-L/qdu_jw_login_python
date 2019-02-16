@@ -4,6 +4,8 @@ import requests
 from lxml import etree
 import pymysql
 import pymysql.cursors
+import Ocr
+import time
 
 
 class Login():
@@ -36,6 +38,7 @@ class Login():
     # 下载验证码
 
     def down_captcha(self):
+        # 先请求login，获取下cookie
         self.r.get(url=self.url['login'], headers=self.headers)
         pic = self.r.get(url=self.url['captcha'], headers=self.headers)
         with open('code.jpg', 'wb') as f:
@@ -49,15 +52,16 @@ class Login():
             print('cookie登陆')
             requests.utils.add_dict_to_cookiejar(self.r.cookies, self.cookies)
             return True
-        self.down_captcha()
-        code = input('请输入验证码：')
-        check = self.r.get(url=self.url['check'], headers=self.headers, params={
-                           'captchaCode': code})
-        print(check.json())
-        if (check.json() == False):
-            print('验证码错误')
-            return False
-        self.data['j_captcha'] = code
+
+        # code = input('请输入验证码：')
+        code = self.ocr_captcha()
+        count = 0
+        while self.check_captcha(code) == False:
+            if (count > 10):
+                print('验证码识别错误，退出')
+                return False
+            code = self.ocr_captcha()
+            count += 1
         res = self.r.post(
             url=self.url['post'], headers=self.headers, data=self.data,)
         # 登陆成功会重定向到此url
@@ -69,11 +73,36 @@ class Login():
         self.insert_cookie()
         return True
 
+    # 识别验证码
+    def ocr_captcha(self):
+        content = self.down_captcha()
+        code = Ocr.ocr_api(content)
+        count = 0
+        while code == False:
+            time.sleep(550)
+            if (count > 15):
+                print('识别上传错误')
+                return False
+            count += 1
+            code = Ocr.ocr_api(content)
+        return code.replace(' ', '')
+
+    # 校验验证码
+    def check_captcha(self, code):
+        check = self.r.get(url=self.url['check'], headers=self.headers, params={
+                           'captchaCode': code})
+        print(check.json())
+        # 调用接口，判断验证码是否正确
+        if (check.json() == False):
+            return False
+        self.data['j_captcha'] = code
+        return True
+
     # 将Cookie插入数据库
+
     def insert_cookie(self):
         sql = "UPDATE user SET jw_cookies = '%s' WHERE uid = %d" % (
             self.r.cookies['JSESSIONID'], self.uid)
-        print(sql)
         connection = pymysql.connect(host='182.254.243.154',
                                           user='blackn',
                                           password='xzWG3HJswEcYFwEf',
@@ -145,8 +174,15 @@ class Login():
             num += 1
         print('解析成功')
         print(classInfo)
+        return classInfo
+
+
+def get_class(username, password, uid=None):
+    login = Login(username, password, uid=24)
+    login.parse_class()
 
 
 if __name__ == "__main__":
-    login = Login('201540704357', 'ss44520f', uid=24)
-    login.parse_class()
+    # login = Login('201540704357', 'ss44520f', uid=24)
+    # login.parse_class()
+    get_class('201540704357', 'ss44520f', uid=24)
