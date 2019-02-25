@@ -11,7 +11,7 @@ import json
 
 
 def jsonData(code, data, msg):
-    response = {'code': code, 'data': data, 'msg': msg}
+    response = {'Code': code, 'Data': data, 'Msg': msg}
     return json.dumps(response, ensure_ascii=False)
 
 
