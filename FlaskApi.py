@@ -5,19 +5,23 @@ app = Flask(__name__)  # 创建一个Web应用
 
 app.config['DEBUG'] = True
 
+
 # 登陆
-
-
 @app.route('/flask/api/login/<username>/<password>', methods=['GET'])
 def login(username, password):
     return Main.login(username, password)
 
+
 # 获取课程表
-
-
 @app.route('/flask/api/getclasslist/<cookie>', methods=['GET'])
 def getClass(cookie):
     return Main.getClassList(cookie)
+
+
+# 获取学生ID
+@app.route('/flask/api/getstuid/<cookie>', methods=['GET'])
+def getStuId(cookie):
+    return Main.getSId(cookie)
 
 
 if __name__ == "__main__":
