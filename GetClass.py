@@ -36,7 +36,16 @@ def getClass(cookie):
         # 3969-3973，分别代表第一大节课到第五大节课，2-3969代表周二的第一节课
         for dayKey in day.keys():
             re = '//td[@id="' + str(num) + '-' + str(n) + '"]/text()'
-            day[dayKey] = selector.xpath(re)
+            oneClassArr = selector.xpath(re)
+            oneClassStr = ''
+            # ["<<软件工程导论Ⅱ>>;9","东12教507","老师XXX","1-16周","讲课学时"], 这种格式，数组内有5个值，分别为课程、教室、老师、上课周次和讲课学时
+            # 将数组拼接为字符串，去除讲课学时字段
+            if (len(oneClassArr) > 0):
+                for x in oneClassArr:
+                    if (x == '讲课学时' or x == '名称'):
+                        continue
+                    oneClassStr += x + '<br>'
+                day[dayKey] = oneClassStr
             if (day[dayKey]):
                 flag = 1
             n += 1
