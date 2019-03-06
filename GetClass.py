@@ -26,7 +26,7 @@ def getClass(cookie):
     # 将request.content 转化为 Element
     selector = etree.HTML(res.text)
     classInfo = {'周一': '', '周二': '', '周三': '',
-                 '周四': '', '周五': '', '周六': '', '周日': ''}
+                 '周四': '', '周五': '', '周六': ''}
     num = 1
     flag = 0
     for key in classInfo.keys():
@@ -37,15 +37,19 @@ def getClass(cookie):
         for dayKey in day.keys():
             re = '//td[@id="' + str(num) + '-' + str(n) + '"]/text()'
             oneClassArr = selector.xpath(re)
-            oneClassStr = ''
-            # ["<<软件工程导论Ⅱ>>;9","东12教507","老师XXX","1-16周","讲课学时"], 这种格式，数组内有5个值，分别为课程、教室、老师、上课周次和讲课学时
+            # 包含正确课程信息的数组
+            oneClassCurrentArr = []
+            # ["<<软件工程导论Ⅱ>>;9","东12教507","老师XXX","1-16周","讲课学时"], 这种格式，数组内有5个值，分别为课程、教室、老师、上课周次和讲课学时、名称
             # 将数组拼接为字符串，去除讲课学时字段
             if (len(oneClassArr) > 0):
                 for x in oneClassArr:
                     if (x == '讲课学时' or x == '名称'):
                         continue
-                    oneClassStr += x + '<br>'
-                day[dayKey] = oneClassStr
+                    if "<<" in str(x):
+                        x = x.split('<<')[1]
+                        x = x.split('>>')[0]
+                    oneClassCurrentArr.append(x)
+                day[dayKey] = oneClassCurrentArr
             if (day[dayKey]):
                 flag = 1
             n += 1
