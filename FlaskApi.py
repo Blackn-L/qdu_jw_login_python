@@ -13,9 +13,9 @@ def login(username, password):
 
 
 # 获取课程表
-@app.route('/flask/api/getclasslist/<cookie>', methods=['GET'])
-def getClass(cookie):
-    return Main.getClassList(cookie)
+@app.route('/flask/api/getclasslist/<cookie>/<yearId>/<termId>', methods=['GET'])
+def getClass(cookie, yearId, termId):
+    return Main.getClassList(cookie, yearId, termId)
 
 
 # 获取学生ID

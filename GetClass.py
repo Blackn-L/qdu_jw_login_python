@@ -6,7 +6,7 @@ from Common import jsonData, setHeaders
 
 
 # 获取课程表
-def getClass(cookie):
+def getClass(cookie, yearId, termId):
     headers = setHeaders()
     cookies = {'JSESSIONID': cookie}
     url = 'http://jw.qdu.edu.cn/academic/manager/coursearrange/showTimetable.do'
@@ -14,9 +14,9 @@ def getClass(cookie):
         # 学生ID
         'id': '562922',
         # 学年，37为17学年
-        'yearid': '37',
+        'yearid': yearId,
         # termid,1为春季学期，2为秋季学期，3为夏季学期
-        "termid": '2',
+        "termid": termId,
         'timetableType': 'STUDENT',
         # COMBINE为大节课表
         'sectionType': 'COMBINE'

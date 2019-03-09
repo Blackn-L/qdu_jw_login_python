@@ -73,5 +73,5 @@ class Login():
         if (res.url != 'http://jw.qdu.edu.cn/academic/index_new.jsp'):
             print(self.data)
             print('账号密码错误')
-            return jsonData(400, False, '账号密码错误！请核对后重试')
+            return jsonData(300, False, '账号密码错误！请核对后重试')
         return jsonData(200, self.r.cookies['JSESSIONID'], '登陆成功')
