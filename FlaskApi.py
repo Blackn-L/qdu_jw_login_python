@@ -24,5 +24,11 @@ def getStuId(cookie):
     return Main.getSId(cookie)
 
 
+# 判断Cookie是否过期
+@app.route('/flask/api/checkcookie/<cookie>', methods=['GET'])
+def check(cookie):
+    return Main.check(cookie)
+
+
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=8080, debug=True)
