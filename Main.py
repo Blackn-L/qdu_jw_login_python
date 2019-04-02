@@ -2,6 +2,7 @@ from Login import Login
 from GetClass import getClass
 from GetStuId import getStuId
 from CheckCookie import checkCookie
+from GetMark import getMark
 
 
 # 登陆
@@ -18,6 +19,12 @@ def getClassList(cookie, yearId, termId):
 # 获取学生ID
 def getSId(cookie):
     return getStuId(cookie)
+
+
+# 获取学生成绩
+def getMarks(cookie, yearId, termId):
+    return getMark(cookie, yearId, termId)
+
 
 # 验证Cookies是否过期
 def check(cookie):

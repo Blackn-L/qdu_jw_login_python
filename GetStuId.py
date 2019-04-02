@@ -12,14 +12,18 @@ def getStuId(cookie):
     headers = setHeaders()
     cookies = {'JSESSIONID': cookie}
     url = 'http://jw.qdu.edu.cn/academic/student/currcourse/currcourse.jsdo?groupId=&moduleId=2000'
-    res = requests.get(url=url, headers=headers, cookies=cookies)
-    # 将request.content 转化为 Element
-    selector = etree.HTML(res.text)
-    result = selector.xpath('/html/body/p/input[1]/@onclick')
-    if (len(result) < 1):
-        return jsonData(250, False, 'Cookies过期')
-    for x in result:
-        y = x.split('id=', 1)
-        y = y[1].split('&yearid', 1)
-        # 取出ID
-    return jsonData(200, y[0], '学生ID获取成功！')
+    try:
+        res = requests.get(url=url, headers=headers, cookies=cookies)
+    except:
+        return jsonData(400, False, '教务服务器异常')
+    else:
+        # 将request.content 转化为 Element
+        selector = etree.HTML(res.text)
+        result = selector.xpath('/html/body/p/input[1]/@onclick')
+        if (len(result) < 1):
+            return jsonData(250, False, 'Cookies过期')
+        for x in result:
+            y = x.split('id=', 1)
+            y = y[1].split('&yearid', 1)
+            # 取出ID
+        return jsonData(200, y[0], '学生ID获取成功！')

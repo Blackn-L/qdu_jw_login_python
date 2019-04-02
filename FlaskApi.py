@@ -24,6 +24,12 @@ def getStuId(cookie):
     return Main.getSId(cookie)
 
 
+# 获取学生成绩
+@app.route('/flask/api/getmark/<cookie>/<yearId>/<termId>', methods=['GET'])
+def getMark(cookie, yearId, termId):
+    return Main.getMarks(cookie, yearId, termId)
+
+
 # 判断Cookie是否过期
 @app.route('/flask/api/checkcookie/<cookie>', methods=['GET'])
 def check(cookie):
