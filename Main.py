@@ -12,8 +12,8 @@ def login(username, password):
 
 
 # 获取课程表
-def getClassList(cookie, yearId, termId):
-    return getClass(cookie, yearId, termId)
+def getClassList(cookie, yearId, termId, stuId):
+    return getClass(cookie, yearId, termId, stuId)
 
 
 # 获取学生ID
