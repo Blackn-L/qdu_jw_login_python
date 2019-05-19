@@ -36,5 +36,11 @@ def check(cookie):
     return Main.check(cookie)
 
 
+# 获取课程修读课程
+@app.route('/flask/api/getcredit/<cookie>', methods=['GET'])
+def getCredit(cookie):
+    return Main.getStuCredit(cookie)
+
+
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=8080, debug=True)
