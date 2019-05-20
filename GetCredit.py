@@ -8,7 +8,7 @@ from Common import jsonData, setHeaders
 
 def getCredit(cookie):
     headers = setHeaders()
-    cookies = {'JSESSIONID': 'F89F7223058A6247A15C19C5D1013DC5.TA1'}
+    cookies = {'JSESSIONID': cookie}
     url = 'http://jw.qdu.edu.cn/academic/student/queryscore/check.jsdo?groupId=&moduleId=2024'
     try:
         res = requests.get(url=url, headers=headers, cookies=cookies)
